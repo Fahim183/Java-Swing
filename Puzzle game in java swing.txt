@@ -1,0 +1,151 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+
+public class Puzzle extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+	JButton b1,b2,b3,b4,b5,b6,b7,b8,b9,next;
+
+    public Puzzle() {
+        super("Puzzle Game");
+
+     // 1. Setup Frame
+        getContentPane().setBackground(Color.BLACK);
+        setLayout(null);
+
+        // 2. Setup Title
+        JLabel title = new JLabel("Sliding Puzzle Game", SwingConstants.CENTER);
+        title.setFont(new Font("Poppins", Font.BOLD, 22));
+        title.setForeground(new Color(255, 215, 0));
+        title.setBounds(70, 10, 250, 40);
+        add(title);
+
+     // 3. Setup Buttons
+        Font btnFont = new Font("Poppins", Font.BOLD, 28);
+
+        
+        b1=createTile("1", btnFont);
+        b2=createTile(" ", btnFont);
+        b3=createTile("3", btnFont);
+        b4=createTile("4", btnFont);
+        b5=createTile("5", btnFont);
+        b6=createTile("6", btnFont);                       
+        b7=createTile("7", btnFont);
+        b8=createTile("8", btnFont);
+        b9=createTile("2", btnFont);
+
+        next = new JButton("Next");
+        next.setFont(new Font("Poppins", Font.BOLD, 22));
+        next.setBackground(Color.BLACK);
+        next.setForeground(Color.GREEN);
+        next.setBounds(120, 280, 150, 50);
+        next.setFocusPainted(false);
+        add(next);
+        
+        // 4. Place Buttons manually
+        place(b1, 60, 60);
+        place(b2, 150, 60);
+        place(b3, 240, 60);
+
+        place(b4, 60, 130);
+        place(b5, 150, 130);
+        place(b6, 240, 130);
+
+        place(b7, 60, 200);
+        place(b8, 150, 200);
+        place(b9, 240, 200);
+
+        // 5. Add Listeners
+       JButton[] all = {b1,b2,b3,b4,b5,b6,b7,b8,b9,next};
+        for (JButton b : all) b.addActionListener(this);
+
+        
+        String path = "C:\\Users\\USER\\Downloads\\New folder/number-puzzle-games.jpg";
+        ImageIcon icon1 = new ImageIcon(path);
+        // Use 'this.setIconImage' instead of 'Frame.setIconImage'
+        if(icon1.getImageLoadStatus() == MediaTracker.COMPLETE){
+            this.setIconImage(icon1.getImage()); 
+        } 
+        
+        // 5. Add Listeners
+        setSize(380, 400);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    
+  
+    
+    private JButton createTile(String text, Font font) {
+        JButton b = new JButton(text);
+        b.setFont(font);
+        b.setBackground(new Color(45, 45, 45));
+        b.setForeground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+        return b;
+    }
+
+    
+    private void place(JButton b, int x, int y) {
+        b.setBounds(x, y, 80, 60);
+        add(b);
+    }
+
+    
+    private void move(JButton current, JButton... neighbors) {
+        if (current == lastPressed) {
+            for (JButton n : neighbors) {
+                if (n.getText().equals(" ")) {
+                    n.setText(current.getText());
+                    current.setText(" ");
+                    repaint();
+                    return;
+                }
+            }
+        }
+    }
+
+    JButton lastPressed = null;
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    	 // track which button was clicked
+        if (e.getSource() instanceof JButton)
+            lastPressed = (JButton) e.getSource();
+
+        // Logic for the "Next" (Shuffle/Cheat) button
+        if(e.getSource()==next){
+            String s=b4.getText(); b4.setText(b9.getText()); b9.setText(s);
+            s=b1.getText(); b1.setText(b5.getText()); b5.setText(s);
+            s=b2.getText(); b2.setText(b7.getText()); b7.setText(s);
+            repaint();
+        }
+
+     // Attempt to move the tiles
+        move(b1, b2, b4);
+        move(b2, b1, b3, b5);
+        move(b3, b2, b6);
+        move(b4, b1, b7, b5);
+        move(b5, b2, b4, b6, b8);
+        move(b6, b3, b5, b9);
+        move(b7, b4, b8);
+        move(b8, b7, b9, b5);
+        move(b9, b6, b8);
+
+     // Check win condition
+        if (b1.getText().equals("1") && b2.getText().equals("2") && b3.getText().equals("3") &&
+            b4.getText().equals("4") && b5.getText().equals("5") && b6.getText().equals("6") &&
+            b7.getText().equals("7") && b8.getText().equals("8") && b9.getText().equals(" ")) {
+
+            JOptionPane.showMessageDialog(this, "🎉 You Won the Game! 🎉");
+        }
+    }
+
+    public static void main(String[] args) {
+        new Puzzle();
+    }
+}
