@@ -1,0 +1,121 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        JFrame frame = new JFrame("My Calculator");
+        frame.setSize(600, 350);
+        frame.setLayout(null);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ////////////////////Title Label///////////////////////
+        JLabel titleLabel = new JLabel();
+        titleLabel.setBounds(180, 10, 200, 30);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        frame.add(titleLabel);
+        
+        ////////////////////Number 1 Label///////////////////////
+        JLabel label1 = new JLabel();
+        label1.setText("Number 1:");
+        label1.setBounds(10, 20, 80, 20);
+        frame.add(label1);
+        
+        ///////////////Number 1 Text Field//////////////////
+        JTextField tf1 = new JTextField();
+        tf1.setBounds(110, 20, 150, 20);
+        frame.add(tf1);
+        
+        ////////////////////Number 2 Label///////////////////////
+        JLabel label2 = new JLabel();
+        label2.setText("Number 2:");
+        label2.setBounds(10, 45, 80, 20);
+        frame.add(label2);
+        
+        ///////////////Number 2 Text Field//////////////////
+        JTextField tf2 = new JTextField();
+        tf2.setBounds(110, 45, 150, 20);
+        frame.add(tf2);
+        
+
+        // Four buttons in one horizontal line
+        JButton btnSubtract = new JButton("Subtract");
+        btnSubtract.setBounds(30, 120, 110, 40); 
+        btnSubtract.setBackground(Color.white);
+        frame.add(btnSubtract);
+
+        JButton btnAdd = new JButton("ADD");
+        btnAdd.setBounds(170, 120, 110, 40);
+        btnAdd.setBackground(Color.white);
+        frame.add(btnAdd);
+
+        JButton btnMultiply = new JButton("Multiply");
+        btnMultiply.setBounds(300, 120, 110, 40);
+        btnMultiply.setBackground(Color.white);
+        frame.add(btnMultiply);
+
+        JButton btnDivide = new JButton("Divide");
+        btnDivide.setBounds(430, 120, 110, 40);
+        btnDivide.setBackground(Color.white);
+        frame.add(btnDivide);
+
+        // Four result labels in one horizontal line (exactly like the picture)
+        JLabel resSubtract = new JLabel("Result: ");
+        resSubtract.setBounds(30, 180, 120, 30);
+        resSubtract.setFont(new Font("Arial", Font.PLAIN, 18));
+        frame.add(resSubtract);
+
+        JLabel resAdd = new JLabel("Result: ");
+        resAdd.setBounds(180, 180, 120, 30);
+        resAdd.setFont(new Font("Arial", Font.PLAIN, 18));
+        frame.add(resAdd);
+
+        JLabel resMultiply = new JLabel("Result: ");
+        resMultiply.setBounds(310, 180, 120, 30);
+        resMultiply.setFont(new Font("Arial", Font.PLAIN, 18));
+        frame.add(resMultiply);
+
+        JLabel resDivide = new JLabel("Result: ");
+        resDivide.setBounds(440, 180, 120, 30);
+        resDivide.setFont(new Font("Arial", Font.PLAIN, 18));
+        frame.add(resDivide);
+
+        // Actions - exactly the same results as in your picture
+        btnSubtract.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int a = Integer.parseInt(tf1.getText());
+                int b = Integer.parseInt(tf2.getText());
+                resSubtract.setText("Result: " + (a - b));     
+            }
+        });
+
+        btnAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int a = Integer.parseInt(tf1.getText());
+                int b = Integer.parseInt(tf2.getText());
+                resAdd.setText("Result: " + (a + b));        
+                }
+        });
+
+        btnMultiply.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int a = Integer.parseInt(tf1.getText());
+                int b = Integer.parseInt(tf2.getText());
+                resMultiply.setText("Result: " + (a * b));    
+            }
+        });
+
+        btnDivide.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int a = Integer.parseInt(tf1.getText());
+                int b = Integer.parseInt(tf2.getText());
+                resDivide.setText("Result: " + (a / b));      
+            }
+        });
+
+        frame.setVisible(true);
+    }
+}
