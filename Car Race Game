@@ -1,0 +1,120 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class CarGame extends JPanel implements ActionListener, KeyListener {
+
+    private static final long serialVersionUID = 1L;
+
+    // Game sizes
+    int panelWidth = 400;
+    int panelHeight = 600;
+
+    // Player car
+    int carX = 180;
+    int carY = 500;
+    int carWidth = 50;
+    int carHeight = 100;
+
+    // Car Images
+    Image carImg;
+    Image obsCarImg;  // NEW: Image for obstacle car
+
+    // Obstacle car
+    int obsX = 100;
+    int obsY = -200;
+    int obsWidth = 50;
+    int obsHeight = 100;
+
+    int speed = 5;
+    int score = 0;
+
+    Timer timer;
+
+    public CarGame() {
+
+        // Load player car image
+        ImageIcon icon = new ImageIcon("C:\\Users\\USER\\Downloads\\New folder\\imgbin_18e8f1e1068f0557653848526922bbac.png");
+        carImg = icon.getImage().getScaledInstance(carWidth, carHeight, Image.SCALE_SMOOTH);
+
+        // NEW: Load obstacle car image
+        ImageIcon obsIcon = new ImageIcon("C:\\Users\\USER\\Downloads\\New folder\\imgbin_100828b13dc1c1b7a00b6b74d375e3f5.png"); // Put your red car image path here
+        obsCarImg = obsIcon.getImage().getScaledInstance(obsWidth, obsHeight, Image.SCALE_SMOOTH);
+        
+        setPreferredSize(new Dimension(panelWidth, panelHeight));
+        setBackground(Color.DARK_GRAY);
+        setFocusable(true);
+        addKeyListener(this);
+
+        timer = new Timer(20, this);
+        timer.start();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Road
+        g.setColor(Color.GRAY);
+        g.fillRect(50, 0, 300, panelHeight);
+
+        g.setColor(Color.WHITE);
+        for (int i = 0; i < panelHeight; i += 40) {
+            g.fillRect(195, i, 10, 20);
+        }
+
+        // Player Car
+        g.drawImage(carImg, carX, carY, null);
+
+        // Obstacle Car - NOW USING IMAGE INSTEAD OF RED RECTANGLE
+        g.drawImage(obsCarImg, obsX, obsY, null);
+
+        // Score
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.drawString("Score: " + score, 10, 25);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        obsY += speed;
+
+        if (obsY > panelHeight) {
+            obsY = -200;
+            obsX = 50 + (int)(Math.random() * 250);
+            score++;
+            speed++;
+        }
+
+        if (new Rectangle(carX, carY, carWidth, carHeight)
+                .intersects(new Rectangle(obsX, obsY, obsWidth, obsHeight))) {
+
+            timer.stop();
+            JOptionPane.showMessageDialog(this,
+                    "💥 Crash! Game Over!\nScore: " + score);
+            System.exit(0);
+        }
+
+        repaint();
+    }
+
+    // Controls
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_LEFT && carX > 60) carX -= 20;
+        if (e.getKeyCode() == KeyEvent.VK_RIGHT && carX < 290) carX += 20;
+    }
+
+    @Override public void keyReleased(KeyEvent e) {}
+    @Override public void keyTyped(KeyEvent e) {}
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Car Racing Game");
+        CarGame game = new CarGame();
+
+        frame.add(game);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
